@@ -734,3 +734,20 @@ a.mf-stat:hover {
     display: none;
   }
 }
+
+/* ── Landing: labels above stacked grids, notes under a grid ─────────────── */
+
+.mf-subhead {
+  margin: 28px 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: light-dark(#000000, #ffffff);
+}
+
+.mf-section-title + .mf-subhead {
+  margin-top: 8px;
+}
+
+.mf-section-note {
+  margin-top: 16px;
+}

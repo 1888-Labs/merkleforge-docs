@@ -24,7 +24,7 @@ export default defineConfig({
   title: 'MerkleForge',
   titleTemplate: '%s · MerkleForge',
   description:
-    'Authenticated data structures for Rust: Binary, Sparse, and Ethereum-compatible Patricia Merkle trees behind one API, with pluggable hashes and stateless proofs.',
+    'Authenticated data structures for Rust and TypeScript: Binary, Sparse, and Ethereum-compatible Patricia Merkle trees behind one API, with pluggable hashes and byte-identical stateless proofs.',
   basePath,
   baseUrl: 'https://1888-labs.github.io',
   // Pages live in `pages/`, static files in `public/`.
@@ -95,6 +95,8 @@ export default defineConfig({
         { text: 'Changelog', link: `${repo}/blob/main/CHANGELOG.md` },
         { text: 'Contributing', link: '/docs/community/contributing' },
         { text: 'crates.io', link: 'https://crates.io/crates/merkle-variants' },
+        { text: 'npm', link: 'https://www.npmjs.com/org/merkleforge' },
+        { text: 'TypeScript releases', link: 'https://github.com/1888-Labs/MerkleForge-ts/releases' },
       ],
     },
   ],
