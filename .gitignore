@@ -5,3 +5,7 @@ pages.gen.ts
 # Generated at deploy time by the site build script
 public/benchmark-data.json
 public/site-data.json
+_site/
+# Rust workspace checkout used for benchmarks (see scripts/build_site.py)
+merkleforge/
+__pycache__/

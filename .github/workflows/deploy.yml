@@ -1,0 +1,86 @@
+name: Deploy
+
+# Builds the site with fresh Rust benchmarks and publishes it to the `gh-pages`
+# branch of 1888-Labs/MerkleForge, which serves https://1888-labs.github.io/MerkleForge/.
+# Pushing there needs PAGES_DEPLOY_KEY: the private half of a write deploy key on
+# 1888-Labs/MerkleForge.
+
+on:
+  push:
+    branches: [main]
+  # Pick up new Rust releases and benchmark changes.
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  # Never cancel a run mid-deploy; queue the newer run behind it instead.
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_NET_RETRY: "10"
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout docs
+        uses: actions/checkout@v6
+
+      - name: Checkout Rust crates
+        uses: actions/checkout@v6
+        with:
+          repository: 1888-Labs/MerkleForge
+          ref: main
+          path: merkleforge
+
+      # The toolchain comes from merkleforge/rust-toolchain.toml.
+      - name: Setup cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: merkleforge
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Sync the Rust crate version
+        run: |
+          python3 scripts/sync_versions.py
+          if ! git diff --quiet; then
+            version=$(python3 -c "import json; print(json.load(open('versions.json'))['rust'])")
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -am "chore: point the docs at Rust crates v${version}"
+            git push origin HEAD:main
+          fi
+
+      - name: Install site dependencies
+        run: npm ci
+
+      - name: Run binary-tree benchmarks
+        run: cargo bench --bench binary_tree
+        working-directory: merkleforge
+
+      - name: Build site
+        run: python3 scripts/build_site.py --minimum-samples 36
+
+      - name: Publish to 1888-Labs/MerkleForge gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.PAGES_DEPLOY_KEY }}
+          external_repository: 1888-Labs/MerkleForge
+          publish_branch: gh-pages
+          publish_dir: ./_site
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          full_commit_message: "deploy: merkleforge-docs@${{ github.sha }}"

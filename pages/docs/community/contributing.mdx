@@ -27,10 +27,13 @@ cargo test --workspace
 
 The workspace pins Rust 1.97.1 in `rust-toolchain.toml`; `rustup` installs it automatically.
 
-For work on this website (in `docs/`, built with [Vocs](https://vocs.dev)):
+This website lives in its own repository,
+[1888-Labs/merkleforge-docs](https://github.com/1888-Labs/merkleforge-docs), built with
+[Vocs](https://vocs.dev):
 
 ```bash
-cd docs
+git clone https://github.com/1888-Labs/merkleforge-docs.git
+cd merkleforge-docs
 npm ci
 npm run dev
 ```
@@ -53,11 +56,7 @@ make lint   # Clippy across the workspace, warnings denied
 make test   # all workspace tests in release mode
 ```
 
-For website changes, also run:
-
-```bash
-npm --prefix docs run build
-```
+For website changes, run `npm run build` in the docs repository.
 
 ## Pull request guidelines
 

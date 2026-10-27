@@ -11,14 +11,14 @@ const basePath = (process.env.VOCS_BASE_PATH ?? '/MerkleForge').replace(/\/+$/, 
 /** Prefix a public asset path with the base path (Vocs does not do this for logo/icon URLs). */
 const asset = (file: string) => (basePath === '/' ? `/${file}` : `${basePath}/${file}`)
 
-/** Crate version, read from the workspace manifest so releases only bump `Cargo.toml`. */
-const version = (() => {
-  const manifest = readFileSync(new URL('../Cargo.toml', import.meta.url), 'utf8')
-  const match = manifest.match(/^\[workspace\.package\][^[]*?^version\s*=\s*"([^"]+)"/m)
-  if (!match) throw new Error('could not read [workspace.package] version from Cargo.toml')
-  return match[1]
-})()
+/** Rust crate version. `scripts/sync_versions.py` keeps `versions.json` in step with releases. */
+const { rust: version } = JSON.parse(
+  readFileSync(new URL('./versions.json', import.meta.url), 'utf8'),
+) as { rust: string }
+/** The Rust crates. */
 const repo = 'https://github.com/1888-Labs/MerkleForge'
+/** This site. */
+const docsRepo = 'https://github.com/1888-Labs/merkleforge-docs'
 
 export default defineConfig({
   title: 'MerkleForge',
@@ -27,9 +27,9 @@ export default defineConfig({
     'Authenticated data structures for Rust: Binary, Sparse, and Ethereum-compatible Patricia Merkle trees behind one API, with pluggable hashes and stateless proofs.',
   basePath,
   baseUrl: 'https://1888-labs.github.io',
-  // Pages live in `docs/pages`, static files in `docs/public`.
+  // Pages live in `pages/`, static files in `public/`.
   srcDir: '.',
-  // Plain static HTML for GitHub Pages. Output: `docs/dist/public`.
+  // Plain static HTML for GitHub Pages. Output: `dist/public`.
   renderStrategy: 'full-static',
   // Monochrome brand: no accent colour. Black on light, white on dark.
   accentColor: 'light-dark(#000000, #ffffff)',
@@ -80,7 +80,7 @@ export default defineConfig({
     ],
   },
   editLink: {
-    link: `${repo}/edit/main/docs/pages/:path`,
+    link: `${docsRepo}/edit/main/pages/:path`,
     text: 'Suggest changes to this page',
   },
   socials: [{ icon: 'github', link: repo }],
