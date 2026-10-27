@@ -11,10 +11,12 @@ const basePath = (process.env.VOCS_BASE_PATH ?? '/MerkleForge').replace(/\/+$/, 
 /** Prefix a public asset path with the base path (Vocs does not do this for logo/icon URLs). */
 const asset = (file: string) => (basePath === '/' ? `/${file}` : `${basePath}/${file}`)
 
-/** Rust crate version. `scripts/sync_versions.py` keeps `versions.json` in step with releases. */
-const { rust: version } = JSON.parse(
+/** Rust crate and TypeScript package versions, kept in step with releases by `scripts/sync_versions.py`. */
+const { rust: version, typescript: tsVersion } = JSON.parse(
   readFileSync(new URL('./versions.json', import.meta.url), 'utf8'),
-) as { rust: string }
+) as { rust: string; typescript: string }
+/** The TypeScript packages. */
+const tsRepo = 'https://github.com/1888-Labs/MerkleForge-ts'
 /** The Rust crates. */
 const repo = 'https://github.com/1888-Labs/MerkleForge'
 /** This site. */
@@ -90,13 +92,21 @@ export default defineConfig({
     { text: 'Demo', link: '/demo', match: '/demo' },
     { text: 'Benchmarks', link: '/benchmarks', match: '/benchmarks' },
     {
-      text: `v${version}`,
+      text: `Rust v${version}`,
       items: [
         { text: 'Changelog', link: `${repo}/blob/main/CHANGELOG.md` },
-        { text: 'Contributing', link: '/docs/community/contributing' },
         { text: 'crates.io', link: 'https://crates.io/crates/merkle-variants' },
+        { text: 'docs.rs', link: 'https://docs.rs/merkle-core' },
+        { text: 'GitHub', link: repo },
+      ],
+    },
+    {
+      text: `TypeScript v${tsVersion}`,
+      items: [
+        { text: 'Releases', link: `${tsRepo}/releases` },
         { text: 'npm', link: 'https://www.npmjs.com/org/merkleforge' },
-        { text: 'TypeScript releases', link: 'https://github.com/1888-Labs/MerkleForge-ts/releases' },
+        { text: 'API mapping', link: '/docs/reference/typescript' },
+        { text: 'GitHub', link: tsRepo },
       ],
     },
   ],

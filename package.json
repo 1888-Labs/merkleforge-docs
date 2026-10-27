@@ -10,6 +10,9 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@merkleforge/core": "^0.2.1",
+    "@merkleforge/hash": "^0.2.1",
+    "@merkleforge/variants": "^0.2.1",
     "react": "~19.3.0",
     "react-dom": "~19.3.0",
     "vocs": "~2.10.3",

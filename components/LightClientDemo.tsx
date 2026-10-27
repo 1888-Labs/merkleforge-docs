@@ -16,9 +16,8 @@ function short(hex: string) {
 }
 
 /**
- * Interactive light-client demo. Mirrors `BinaryMerkleTree<Sha256>` in the
- * browser with WebCrypto. All hashing runs in effects, so server rendering
- * never touches `crypto.subtle`.
+ * Interactive light-client demo. Runs the `@merkleforge/variants`
+ * `BinaryMerkleTree` with `Sha256` in the browser; all hashing runs in effects.
  */
 export function LightClientDemo() {
   const [rowsText, setRowsText] = React.useState(defaultRows)
@@ -47,10 +46,6 @@ export function LightClientDemo() {
     if (rows.length === 0) {
       setResult(null)
       setError('Add at least one row to build a tree.')
-      return
-    }
-    if (typeof crypto === 'undefined' || !crypto.subtle) {
-      setError('This browser does not expose WebCrypto (crypto.subtle). Use HTTPS or localhost.')
       return
     }
     runProof(rows, safeIndex, claimed)
