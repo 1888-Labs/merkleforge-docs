@@ -2,8 +2,9 @@ name: Deploy
 
 # Builds the site with fresh Rust benchmarks and publishes it to the `gh-pages`
 # branch of 1888-Labs/MerkleForge, which serves https://1888-labs.github.io/MerkleForge/.
-# Pushing there needs PAGES_DEPLOY_KEY: the private half of a write deploy key on
-# 1888-Labs/MerkleForge.
+# Pushing there uses the 1888labs-docs-deploy GitHub App (Contents: write, installed on
+# 1888-Labs/MerkleForge only): its ID in the PAGES_APP_ID variable and its private key in the
+# PAGES_APP_PRIVATE_KEY secret.
 
 on:
   push:
@@ -73,10 +74,19 @@ jobs:
       - name: Build site
         run: python3 scripts/build_site.py --minimum-samples 36
 
+      - name: Get a token for 1888-Labs/MerkleForge
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.PAGES_APP_ID }}
+          private-key: ${{ secrets.PAGES_APP_PRIVATE_KEY }}
+          owner: 1888-Labs
+          repositories: MerkleForge
+
       - name: Publish to 1888-Labs/MerkleForge gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          deploy_key: ${{ secrets.PAGES_DEPLOY_KEY }}
+          personal_token: ${{ steps.app-token.outputs.token }}
           external_repository: 1888-Labs/MerkleForge
           publish_branch: gh-pages
           publish_dir: ./_site
