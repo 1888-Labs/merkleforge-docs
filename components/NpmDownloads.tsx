@@ -23,7 +23,7 @@ const LEGACY = [
 
 type Package = (typeof PACKAGES)[number] | (typeof LEGACY)[number]
 
-type Counts = { downloads: number; recent: number }
+type Counts = { downloads: number; week: number }
 
 type State =
   | { status: 'loading' }
@@ -42,7 +42,9 @@ async function downloads(period: string, name: string): Promise<number> {
 }
 
 /**
- * Live npm download counts for the TypeScript packages. Fetched in the browser
+ * Live npm download counts for the TypeScript packages: the last 7 days (npm's
+ * "weekly downloads", the best signal of ongoing use, since all-time totals
+ * are dominated by mirrors fetching each new version) and all time. Fetched in the browser
  * (api.npmjs.org sends `Access-Control-Allow-Origin: *`), like `CrateDownloads`,
  * so the numbers stay current without rebuilding the site.
  */
@@ -54,11 +56,11 @@ export function NpmDownloads() {
     const today = new Date().toISOString().slice(0, 10)
     Promise.all(
       [...PACKAGES, ...LEGACY].map(async (name) => {
-        const [total, recent] = await Promise.all([
+        const [total, week] = await Promise.all([
           downloads(`${FIRST_PUBLISH}:${today}`, name),
-          downloads('last-month', name),
+          downloads('last-week', name),
         ])
-        return [name, { downloads: total, recent }] as const
+        return [name, { downloads: total, week }] as const
       }),
     )
       .then((entries) => {
@@ -86,9 +88,11 @@ export function NpmDownloads() {
   return (
     <div className="mf-grid">
       <div className="mf-card mf-stat" data-variant="total">
-        <div className="mf-eyebrow">Total downloads</div>
-        <div className="mf-stat-value">{show((c) => c.downloads, all)}</div>
-        <div className="mf-stat-note">{show((c) => c.recent, all)} in the last 30 days</div>
+        <div className="mf-eyebrow">Last 7 days</div>
+        <div className="mf-stat-value">{show((c) => c.week, PACKAGES)}</div>
+        <div className="mf-stat-note">
+          {show((c) => c.downloads, all)} all time, including the earlier names
+        </div>
       </div>
       {PACKAGES.map((name) => (
         <a
@@ -99,8 +103,8 @@ export function NpmDownloads() {
           rel="noreferrer"
         >
           <div className="mf-eyebrow mf-stat-name">{name}</div>
-          <div className="mf-stat-value">{show((c) => c.downloads, [name])}</div>
-          <div className="mf-stat-note">{show((c) => c.recent, [name])} in the last 30 days</div>
+          <div className="mf-stat-value">{show((c) => c.week, [name])}</div>
+          <div className="mf-stat-note">{show((c) => c.downloads, [name])} all time</div>
         </a>
       ))}
       <a
@@ -111,7 +115,7 @@ export function NpmDownloads() {
       >
         <div className="mf-eyebrow mf-stat-name">@1888-labs/merkle-*</div>
         <div className="mf-stat-value">{show((c) => c.downloads, LEGACY)}</div>
-        <div className="mf-stat-note">Earlier names, now deprecated</div>
+        <div className="mf-stat-note">All time, under the earlier names (deprecated)</div>
       </a>
     </div>
   )
