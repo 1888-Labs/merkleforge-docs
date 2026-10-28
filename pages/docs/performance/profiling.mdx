@@ -1,15 +1,24 @@
 ---
 title: Profiling & energy
-description: Flamegraphs, hardware counters, and energy measurements for MerkleForge workloads.
+description: Flamegraphs, CPU and heap profiles, hardware counters, and energy measurements for MerkleForge workloads.
 ---
+
+import { LangBar, Rust, TypeScript } from '../../../components/Lang'
 
 # Profiling & energy
 
-Criterion answers *how long did this take?* Profiling answers *where did the CPU time go?* Use the
+Benchmarks answer *how long did this take?* Profiling answers *where did the CPU time go?* Use the
 tools below when investigating construction, proof generation, hashing, memory access, or trie
-traversal bottlenecks. All commands run from the repository root.
+traversal bottlenecks.
+
+<LangBar />
 
 ## Install tools
+
+<Rust>
+
+All commands on this page run from the root of the
+[MerkleForge](https://github.com/1888-Labs/MerkleForge) repository.
 
 ```bash
 make install-profiling-tools
@@ -27,7 +36,41 @@ If kernel settings block profiling, lower the restriction temporarily:
 sudo sysctl kernel.perf_event_paranoid=1
 ```
 
-## Flamegraphs
+</Rust>
+
+<TypeScript>
+
+Nothing to install: Node.js 22 and newer include the V8 CPU and heap profilers and the inspector
+used by Chrome DevTools. To profile the comparison suite, build the
+[MerkleForge-ts](https://github.com/1888-Labs/MerkleForge-ts) packages and install the
+`bench/` dependencies first:
+
+```bash
+git clone https://github.com/1888-Labs/MerkleForge-ts.git
+cd MerkleForge-ts
+pnpm install && pnpm build
+cd bench
+npm install   # comparison libraries, kept out of the pnpm workspace
+```
+
+To profile your own workload instead, write a small script that does only the work you care
+about, for example:
+
+```js [build-tree.mjs]
+import { utf8 } from '@merkleforge/core'
+import { Keccak256 } from '@merkleforge/hash'
+import { BinaryMerkleTree } from '@merkleforge/variants'
+
+const leaves = Array.from({ length: 100_000 }, (_, i) => utf8(`leaf-${i}`))
+const tree = BinaryMerkleTree.fromLeaves(Keccak256, leaves)
+console.log(tree.root())
+```
+
+</TypeScript>
+
+## CPU profiles and flamegraphs
+
+<Rust>
 
 ```bash
 ./scripts/flamegraph.sh baseline_construction
@@ -40,7 +83,40 @@ sampled CPU time. Useful targets: `baseline_construction`, `hash_throughput`, `b
 `profiling/flamegraph.svg` in the repository is a reference artifact showing the expected shape.
 Regenerate a machine-specific flamegraph before reporting numbers.
 
-## Cache and instruction counters
+</Rust>
+
+<TypeScript>
+
+`--cpu-prof` starts the V8 CPU profiler and writes a `.cpuprofile` file to the current directory
+when the process exits:
+
+```bash
+node --cpu-prof build-tree.mjs
+
+# The bench suite, from bench/ (npm run bench runs node --expose-gc run.mjs).
+# SIZES limits the tree sizes.
+SIZES=131072 node --expose-gc --cpu-prof run.mjs
+```
+
+Open the `.cpuprofile` in the **Performance** panel of Chrome DevTools to see a flame chart, and
+inspect the widest frames first. The bench suite also runs the comparison libraries, so filter
+the profile to MerkleForge frames, or profile a script of your own.
+
+To profile interactively, start Node.js with the inspector and attach Chrome DevTools from
+`chrome://inspect`:
+
+```bash
+node --inspect-brk build-tree.mjs
+```
+
+`--inspect-brk` pauses before the first line so you can start recording first; `--inspect` starts
+without pausing.
+
+</TypeScript>
+
+## Hardware counters and memory
+
+<Rust>
 
 ```bash
 perf stat -e cycles,instructions,cache-misses,cache-references \
@@ -55,7 +131,40 @@ perf stat -e cycles,instructions,cache-misses,cache-references cargo bench --ben
 perf stat -e cycles,instructions,cache-misses,cache-references cargo bench --bench patricia_trie
 ```
 
+</Rust>
+
+<TypeScript>
+
+`--heap-prof` starts the V8 sampling heap profiler and writes a `.heapprofile` file when the process
+exits. Load it in the **Memory** panel of Chrome DevTools to see which functions allocated the
+most:
+
+```bash
+node --heap-prof build-tree.mjs
+```
+
+On Linux, `perf stat` counts cycles, instructions, and cache events around any process, including
+Node.js:
+
+```bash
+perf stat -e cycles,instructions,cache-misses,cache-references node build-tree.mjs
+```
+
+The counts include V8 startup and JIT compilation, so compare runs of the same script.
+
+</TypeScript>
+
 ## Energy
+
+<TypeScript>
+
+:::note
+The energy workload and helper scripts below are part of the Rust repository. The `perf`,
+`turbostat`, and `powertop` commands measure any process, so you can replace the `cargo bench`
+command with a Node.js command such as `node build-tree.mjs`.
+:::
+
+</TypeScript>
 
 The default energy workload builds a 100,000-leaf binary tree with SHA-256, Keccak-256, and BLAKE3.
 Criterion measures wall-clock time; Linux `perf` collects CPU package energy externally.
