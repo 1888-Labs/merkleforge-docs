@@ -66,7 +66,7 @@ export function CrateDownloads() {
           target="_blank"
           rel="noreferrer"
         >
-          <div className="mf-eyebrow">{name}</div>
+          <div className="mf-eyebrow mf-stat-name">{name}</div>
           <div className="mf-stat-value">{show((c) => c.downloads, [name])}</div>
           <div className="mf-stat-note">{show((c) => c.recent, [name])} in the last 90 days</div>
         </a>

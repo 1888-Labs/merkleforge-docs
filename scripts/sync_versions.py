@@ -3,7 +3,8 @@
 
 Reads the workspace version from the Rust checkout (``merkleforge/`` or ``MERKLEFORGE_RUST_DIR``),
 or takes it as an argument, then updates ``versions.json``, the pinned ``merkle-*`` dependencies in
-the MDX pages, and the version badge.
+the MDX pages, and the version badge. Without a version argument it also records the ``latest``
+npm version of ``@merkleforge/core`` as the TypeScript version shown in the site header.
 """
 
 from __future__ import annotations
@@ -13,12 +14,14 @@ import json
 import os
 import re
 import sys
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RUST_DIR = Path(os.environ.get("MERKLEFORGE_RUST_DIR", ROOT / "merkleforge"))
 VERSIONS_FILE = ROOT / "versions.json"
 PAGES_DIR = ROOT / "pages"
+NPM_PACKAGE_URL = "https://registry.npmjs.org/@merkleforge%2fcore"
 
 VERSION_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 WORKSPACE_VERSION_RE = re.compile(r'(?ms)^\[workspace\.package\][^[]*?^version\s*=\s*"([^"]+)"')
@@ -38,6 +41,12 @@ def rust_version() -> str:
     if not match:
         raise SystemExit(f"could not read [workspace.package] version from {manifest}")
     return match.group(1)
+
+
+def typescript_version() -> str:
+    """Read the `latest` dist-tag of `@merkleforge/core` from the npm registry."""
+    with urllib.request.urlopen(NPM_PACKAGE_URL, timeout=30) as response:
+        return str(json.load(response)["dist-tags"]["latest"])
 
 
 def update_pages(version: str) -> list[Path]:
@@ -64,10 +73,16 @@ def main() -> None:
 
     versions = json.loads(VERSIONS_FILE.read_text())
     versions["rust"] = version
+    if not args.version:
+        versions["typescript"] = typescript_version()
     VERSIONS_FILE.write_text(json.dumps(versions, indent=2) + "\n")
 
     changed = update_pages(version)
-    print(f"Rust crates at v{version}; updated {len(changed)} page(s)", file=sys.stderr)
+    print(
+        f"Rust crates at v{version}, TypeScript packages at v{versions.get('typescript')}; "
+        f"updated {len(changed)} page(s)",
+        file=sys.stderr,
+    )
 
 
 if __name__ == "__main__":

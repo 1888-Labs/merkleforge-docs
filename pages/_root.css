@@ -751,3 +751,9 @@ a.mf-stat:hover {
 .mf-section-note {
   margin-top: 16px;
 }
+
+/* Package and crate names keep their real (lowercase) spelling. */
+.mf-eyebrow.mf-stat-name {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}

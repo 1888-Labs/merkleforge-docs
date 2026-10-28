@@ -3,6 +3,8 @@ title: TypeScript packages
 description: The @merkleforge npm packages, how they map to the Rust crates, and what is compatible between the two.
 ---
 
+import { NpmDownloads } from '../../../components/NpmDownloads'
+
 # TypeScript packages
 
 MerkleForge for TypeScript and JavaScript is published on npm under the
@@ -37,6 +39,15 @@ npm i @merkleforge/core @merkleforge/hash @merkleforge/variants
 
 Staging builds from the `develop` branch are published under the `next` dist-tag
 (`npm i @merkleforge/variants@next`).
+
+Releases are published from CI through npm trusted publishing with provenance, and a maintainer
+approves each version with 2FA before it goes live.
+
+### Downloads
+
+Live from npm. The total includes the packages' earlier `@1888-labs/merkle-*` names.
+
+<NpmDownloads />
 
 ## How the API maps
 
