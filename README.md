@@ -34,15 +34,16 @@ binary-tree Criterion benchmarks, builds the site with `scripts/build_site.py`, 
 to the `gh-pages` branch of 1888-Labs/MerkleForge. GitHub Pages serves that branch, so the public URL
 stays `https://1888-labs.github.io/MerkleForge/`.
 
-The push authenticates as the `1888labs-docs-deploy` GitHub App (Contents: write, installed only on
-1888-Labs/MerkleForge), using the `PAGES_APP_ID` variable and the `PAGES_APP_PRIVATE_KEY` secret.
-
 To build the full site locally, clone the Rust repository into `merkleforge/` (or set
 `MERKLEFORGE_RUST_DIR`), run `cargo bench --bench binary_tree` there, then:
 
 ```bash
 python3 scripts/build_site.py
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
