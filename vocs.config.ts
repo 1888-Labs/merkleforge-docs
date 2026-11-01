@@ -91,6 +91,7 @@ export default defineConfig({
     { text: 'Examples', link: '/examples', match: '/examples' },
     { text: 'Demo', link: '/demo', match: '/demo' },
     { text: 'Benchmarks', link: '/benchmarks', match: '/benchmarks' },
+    { text: 'Roadmap', link: '/roadmap', match: '/roadmap' },
     {
       text: `Rust v${version}`,
       items: [
@@ -143,6 +144,8 @@ export default defineConfig({
           { text: 'Why MerkleForge', link: '/docs' },
           { text: 'Getting started', link: '/docs/getting-started' },
           { text: 'Mental model', link: '/docs/mental-model' },
+          { text: 'Use cases', link: '/docs/use-cases' },
+          { text: 'Roadmap', link: '/roadmap' },
         ],
       },
       {
