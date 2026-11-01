@@ -111,6 +111,31 @@ export default defineConfig({
     },
   ],
   sidebar: {
+    '/demo': [
+      {
+        text: 'Demos',
+        items: [{ text: 'Overview', link: '/demo' }],
+      },
+      {
+        text: 'Performance',
+        items: [{ text: 'In-browser benchmarks', link: '/demo/benchmarks' }],
+      },
+      {
+        text: 'Blockchain',
+        items: [
+          { text: 'Airdrop claim', link: '/demo/airdrop' },
+          { text: 'Ethereum state proof', link: '/demo/ethereum' },
+        ],
+      },
+      {
+        text: 'Beyond blockchain',
+        items: [
+          { text: 'File integrity', link: '/demo/file-integrity' },
+          { text: 'Revocation list', link: '/demo/revocation' },
+          { text: 'Light client', link: '/demo/light-client' },
+        ],
+      },
+    ],
     '/docs/': [
       {
         text: 'Introduction',
