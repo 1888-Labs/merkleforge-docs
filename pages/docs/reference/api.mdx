@@ -221,8 +221,8 @@ Each is a frozen `HashFunction` object producing 32-byte digests, identical to t
 Pass it to a tree's constructor and to the static verifiers.
 
 `@merkleforge/hash-wasm` adds `createKeccak256Wasm()` and `createSha256Wasm()`, async factories
-for WebAssembly versions with the same output and `algorithmName` (about 6x faster Keccak-256 in
-Node). See [Hash functions](/docs/guides/hash-functions).
+for WebAssembly versions with the same output and `algorithmName` (3–7x faster Keccak-256 tree
+builds than the pure-JS adapter in Node, [measured](/docs/performance/benchmarks)). See [Hash functions](/docs/guides/hash-functions).
 
 </TypeScript>
 

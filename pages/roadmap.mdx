@@ -54,7 +54,7 @@ per layer, which is ideal for SIMD and for multiple cores.
 | Status | Item |
 | --- | --- |
 | **Now** | **Batch hashing API** in TypeScript ([in review](https://github.com/1888-Labs/MerkleForge-ts/pull/29)): hash adapters can hash a whole tree layer in one call (`hashNodePairs`, `hashLeaves`). `BinaryMerkleTree` stores nodes in one flat buffer and skips hashing padding subtrees. |
-| **Now** | **New WebAssembly backend** for `@merkleforge/hash-wasm`: a 9 KB `no_std` Rust module with SIMD Keccak-256 (two permutations at once). Keccak-256 tree builds are about 4–5x faster than in 0.2.2, and the pure-JS Keccak-256 about 2.5x faster. |
+| **Now** | **New WebAssembly backend** for `@merkleforge/hash-wasm`: a 9 KB `no_std` Rust module with SIMD Keccak-256 (two permutations at once). Keccak-256 tree builds are about 5x faster than in 0.2.2 (485 ms to 98 ms at 131,072 leaves), and pure-JS tree builds about 3x faster, with byte-for-byte identical output ([benchmarks and parity](/docs/performance/benchmarks)). |
 | **Now** | **CI on every runtime**: the full test suite in Chromium, Firefox, and WebKit, and the built packages on Node.js, Deno, and Bun. |
 | Next | One-call proof verification in WebAssembly (fold the whole path in one call), batched multiproofs, and batch hashing for `SparseMerkleTree` updates. |
 | Next | BLAKE3 in WebAssembly, and SHA-256 SIMD (multi-buffer). |

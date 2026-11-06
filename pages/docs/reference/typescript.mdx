@@ -25,7 +25,7 @@ in [1888-Labs/MerkleForge-ts](https://github.com/1888-Labs/MerkleForge-ts).
 | [`@merkleforge/core`](https://www.npmjs.com/package/@merkleforge/core) | `HashFunction` and `MerkleTree` interfaces, proof types, `MerkleError`, byte helpers, proof codecs | `merkle-core` |
 | [`@merkleforge/hash`](https://www.npmjs.com/package/@merkleforge/hash) | `Sha256`, `Keccak256`, `Blake3` | `merkleforge-hash` |
 | [`@merkleforge/variants`](https://www.npmjs.com/package/@merkleforge/variants) | `BinaryMerkleTree` (with multiproofs), `SparseMerkleTree`, `MerklePatriciaTrie`, proof codecs, Solidity proof formatting | `merkle-variants` |
-| [`@merkleforge/hash-wasm`](https://www.npmjs.com/package/@merkleforge/hash-wasm) | WebAssembly `Keccak256` and `Sha256` with identical output, about 6x faster Keccak-256 | TypeScript only |
+| [`@merkleforge/hash-wasm`](https://www.npmjs.com/package/@merkleforge/hash-wasm) | WebAssembly `Keccak256` and `Sha256` with identical output; Keccak-256 tree builds 3–7x faster than pure JS ([measured](/docs/performance/benchmarks)) | TypeScript only |
 | [`@merkleforge/ethereum`](https://www.npmjs.com/package/@merkleforge/ethereum) | Verify `eth_getProof` account and storage proofs against a state root | TypeScript only |
 | [`@merkleforge/openzeppelin`](https://www.npmjs.com/package/@merkleforge/openzeppelin) | Drop-in `StandardMerkleTree` and `SimpleMerkleTree` for `@openzeppelin/merkle-tree`: same roots, proofs, and dumps | TypeScript only |
 
