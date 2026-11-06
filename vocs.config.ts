@@ -91,6 +91,7 @@ export default defineConfig({
     { text: 'Examples', link: '/examples', match: '/examples' },
     { text: 'Demo', link: '/demo', match: '/demo' },
     { text: 'Benchmarks', link: '/benchmarks', match: '/benchmarks' },
+    { text: 'Roadmap', link: '/roadmap', match: '/roadmap' },
     {
       text: `Rust v${version}`,
       items: [
@@ -111,6 +112,31 @@ export default defineConfig({
     },
   ],
   sidebar: {
+    '/demo': [
+      {
+        text: 'Demos',
+        items: [{ text: 'Overview', link: '/demo' }],
+      },
+      {
+        text: 'Performance',
+        items: [{ text: 'In-browser benchmarks', link: '/demo/benchmarks' }],
+      },
+      {
+        text: 'Blockchain',
+        items: [
+          { text: 'Airdrop claim', link: '/demo/airdrop' },
+          { text: 'Ethereum state proof', link: '/demo/ethereum' },
+        ],
+      },
+      {
+        text: 'Beyond blockchain',
+        items: [
+          { text: 'File integrity', link: '/demo/file-integrity' },
+          { text: 'Revocation list', link: '/demo/revocation' },
+          { text: 'Light client', link: '/demo/light-client' },
+        ],
+      },
+    ],
     '/docs/': [
       {
         text: 'Introduction',
@@ -118,6 +144,8 @@ export default defineConfig({
           { text: 'Why MerkleForge', link: '/docs' },
           { text: 'Getting started', link: '/docs/getting-started' },
           { text: 'Mental model', link: '/docs/mental-model' },
+          { text: 'Use cases', link: '/docs/use-cases' },
+          { text: 'Roadmap', link: '/roadmap' },
         ],
       },
       {

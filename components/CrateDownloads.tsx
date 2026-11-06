@@ -33,7 +33,7 @@ async function lastWeek(name: string): Promise<number> {
  * sends `Access-Control-Allow-Origin: *`), so the numbers stay current without
  * rebuilding the static site.
  */
-export function CrateDownloads() {
+export function CrateDownloads({ compact = false }: { compact?: boolean }) {
   const [state, setState] = React.useState<State>({ status: 'loading' })
 
   React.useEffect(() => {
@@ -66,6 +66,30 @@ export function CrateDownloads() {
     if (state.status === 'error') return '—'
     return format.format(crates.reduce((sum, name) => sum + pick(state.counts[name]), 0))
   }
+
+  if (compact)
+    return (
+      <div className="mf-dl">
+        <div className="mf-dl-chip" data-variant="total">
+          <span className="mf-dl-label">crates.io · 7 days</span>
+          <span className="mf-dl-value">{show((c) => c.week)}</span>
+          <span className="mf-dl-note">{show((c) => c.downloads)} all time</span>
+        </div>
+        {CRATES.map((name) => (
+          <a
+            key={name}
+            className="mf-dl-chip"
+            href={`https://crates.io/crates/${name}`}
+            target="_blank"
+            rel="noreferrer"
+            title={`${show((c) => c.downloads, [name])} all time`}
+          >
+            <span className="mf-dl-label">{name}</span>
+            <span className="mf-dl-value">{show((c) => c.week, [name])}</span>
+          </a>
+        ))}
+      </div>
+    )
 
   return (
     <div className="mf-grid">

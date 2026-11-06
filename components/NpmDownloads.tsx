@@ -48,7 +48,7 @@ async function downloads(period: string, name: string): Promise<number> {
  * (api.npmjs.org sends `Access-Control-Allow-Origin: *`), like `CrateDownloads`,
  * so the numbers stay current without rebuilding the site.
  */
-export function NpmDownloads() {
+export function NpmDownloads({ compact = false }: { compact?: boolean }) {
   const [state, setState] = React.useState<State>({ status: 'loading' })
 
   React.useEffect(() => {
@@ -84,6 +84,30 @@ export function NpmDownloads() {
     return format.format(packages.reduce((sum, name) => sum + pick(state.counts[name]), 0))
   }
   const all = [...PACKAGES, ...LEGACY]
+
+  if (compact)
+    return (
+      <div className="mf-dl">
+        <div className="mf-dl-chip" data-variant="total">
+          <span className="mf-dl-label">npm · 7 days</span>
+          <span className="mf-dl-value">{show((c) => c.week, PACKAGES)}</span>
+          <span className="mf-dl-note">{show((c) => c.downloads, all)} all time</span>
+        </div>
+        {PACKAGES.map((name) => (
+          <a
+            key={name}
+            className="mf-dl-chip"
+            href={`https://www.npmjs.com/package/${name}`}
+            target="_blank"
+            rel="noreferrer"
+            title={`${show((c) => c.downloads, [name])} all time`}
+          >
+            <span className="mf-dl-label">{name.replace('@merkleforge/', '')}</span>
+            <span className="mf-dl-value">{show((c) => c.week, [name])}</span>
+          </a>
+        ))}
+      </div>
+    )
 
   return (
     <div className="mf-grid">

@@ -443,6 +443,95 @@ a.mf-stat:hover {
   color: light-dark(#6b6b6b, #a3a3a3);
 }
 
+/* Landing highlights: short cards, two per row on phones. */
+.mf-highlights .mf-feature {
+  min-height: 0;
+  gap: 6px;
+}
+
+.mf-highlights .mf-feature-title {
+  font-size: 17px;
+}
+
+@media (width < 640px) {
+  .mf-grid.mf-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mf-highlights .mf-feature-copy {
+    font-size: 14px;
+  }
+}
+
+/* Compact download counts on the landing page: one wrapping row of small chips. */
+.mf-dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.mf-dl-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid light-dark(#e5e5e5, #262626);
+  border-radius: 8px;
+  font-size: 13px;
+  color: inherit;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+a.mf-dl-chip:hover {
+  border-color: light-dark(#000000, #ffffff);
+}
+
+.mf-dl-chip[data-variant='total'] {
+  background: light-dark(#000000, #ffffff);
+  border-color: transparent;
+}
+
+.mf-dl-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: light-dark(#6b6b6b, #a3a3a3);
+}
+
+.mf-dl-value {
+  font-weight: 600;
+  font-size: 15px;
+  color: light-dark(#000000, #ffffff);
+}
+
+.mf-dl-note {
+  font-size: 12px;
+  color: light-dark(#6b6b6b, #a3a3a3);
+}
+
+.mf-dl-chip[data-variant='total'] .mf-dl-label,
+.mf-dl-chip[data-variant='total'] .mf-dl-note {
+  color: light-dark(#a3a3a3, #5c5c5c);
+}
+
+.mf-dl-chip[data-variant='total'] .mf-dl-value {
+  color: light-dark(#ffffff, #000000);
+}
+
+.mf-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 15px;
+}
+
+.mf-links a {
+  color: light-dark(#000000, #ffffff);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .mf-split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
@@ -756,4 +845,187 @@ a.mf-stat:hover {
 .mf-eyebrow.mf-stat-name {
   text-transform: none;
   letter-spacing: 0.02em;
+}
+
+/* ── Demo pages (components/*Demo.tsx, BrowserBenchmark.tsx) ────────── */
+
+.mf-demo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.mf-demo-card:hover {
+  border-color: light-dark(#000000, #ffffff);
+}
+
+.mf-demo-card .mf-feature-title {
+  font-size: 17px;
+}
+
+.mf-demo-card .mf-feature-copy {
+  font-size: 14px;
+}
+
+.mf-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.mf-checks legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.mf-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.mf-check input {
+  accent-color: light-dark(#000000, #ffffff);
+  width: 16px;
+  height: 16px;
+}
+
+.mf-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mf-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mf-bar-row {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr) 80px;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+@media (width < 640px) {
+  .mf-bar-row {
+    grid-template-columns: minmax(0, 1fr) 72px;
+  }
+
+  .mf-bar-label {
+    grid-column: 1 / -1;
+  }
+}
+
+.mf-bar-track {
+  height: 14px;
+  border-radius: 4px;
+  background: light-dark(#f2f2f2, #1f1f1f);
+  overflow: hidden;
+}
+
+.mf-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: light-dark(#000000, #ffffff);
+}
+
+.mf-bar-value {
+  text-align: right;
+}
+
+.mf-hash-list {
+  margin: 0;
+  padding-left: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.mf-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.mf-input-row .mf-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.mf-tag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mf-tag-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border: 1px solid light-dark(#e5e5e5, #262626);
+  border-radius: 999px;
+}
+
+.mf-tag-remove {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: light-dark(#6b6b6b, #a3a3a3);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mf-tag-remove:hover {
+  color: light-dark(#000000, #ffffff);
+  background: light-dark(#f2f2f2, #1f1f1f);
+}
+
+.mf-chunk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+  gap: 3px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.mf-chunk {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  border: 1px solid light-dark(#e5e5e5, #262626);
+  background: light-dark(#f2f2f2, #1f1f1f);
+}
+
+.mf-chunk[data-state='ok'] {
+  border-color: transparent;
+  background: light-dark(#000000, #ffffff);
+}
+
+/* Monochrome brand: a bad chunk is hollow, hatched, and outlined in the text colour. */
+.mf-chunk[data-state='bad'] {
+  border: 2px solid light-dark(#000000, #ffffff);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 2px,
+    light-dark(#000000, #ffffff) 2px 3px
+  );
+  transform: scale(1.25);
 }
